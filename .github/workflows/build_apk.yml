@@ -5,6 +5,9 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,8 +33,11 @@ jobs:
       - name: Build APK Release
         run: flutter build apk --release --verbose
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          name: flauncher-glassmorphism-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          tag_name: latest
+          name: FLauncher Custom Release
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
