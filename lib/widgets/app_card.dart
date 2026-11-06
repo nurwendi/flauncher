@@ -133,83 +133,71 @@ class _AppCardState extends State<AppCard> with SingleTickerProviderStateMixin {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(14),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    // Frosted glass background layer
-                    BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: Focus.of(context).hasFocus
-                                ? [Colors.white.withOpacity(0.28), Colors.white.withOpacity(0.15)]
-                                : [Colors.black.withOpacity(0.45), Colors.black.withOpacity(0.25)],
-                          ),
-                        ),
-                      ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Focus.of(context).hasFocus
+                        ? Colors.white.withOpacity(0.25)
+                        : Colors.black.withOpacity(0.40),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Focus.of(context).hasFocus
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.22),
+                      width: Focus.of(context).hasFocus ? 2.5 : 1.2,
                     ),
-                    // App Banner or Icon + Name (crisp foreground, never blurred)
-                    InkWell(
-                      autofocus: widget.autofocus,
-                      focusColor: Colors.transparent,
-                      onTap: () => _onPressed(context, null),
-                      onLongPress: () => _onLongPress(context, null),
-                      child: widget.application.banner != null
-                          ? Ink.image(
-                              image: _cachedMemoryImage(widget.application.banner!),
-                              fit: BoxFit.cover,
-                            )
-                          : Padding(
-                              padding: EdgeInsets.all(8),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Ink.image(
-                                      image: _cachedMemoryImage(widget.application.icon!),
-                                      height: double.infinity,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(left: 8),
-                                      child: Text(
-                                        widget.application.name,
-                                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              shadows: [
-                                                Shadow(color: Colors.black87, blurRadius: 4, offset: Offset(1, 1))
-                                              ],
-                                            ),
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 3,
+                  ),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      // App Banner or Icon + Name (100% crisp foreground)
+                      InkWell(
+                        autofocus: widget.autofocus,
+                        focusColor: Colors.transparent,
+                        onTap: () => _onPressed(context, null),
+                        onLongPress: () => _onLongPress(context, null),
+                        child: widget.application.banner != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Ink.image(
+                                  image: _cachedMemoryImage(widget.application.banner!),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Ink.image(
+                                        image: _cachedMemoryImage(widget.application.icon!),
+                                        height: double.infinity,
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Flexible(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 8),
+                                        child: Text(
+                                          widget.application.name,
+                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                shadows: [
+                                                  Shadow(color: Colors.black87, blurRadius: 4, offset: Offset(1, 1))
+                                                ],
+                                              ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                    ),
-                    // Border overlay
-                    IgnorePointer(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: Focus.of(context).hasFocus
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.2),
-                            width: Focus.of(context).hasFocus ? 2.5 : 1.2,
-                          ),
-                        ),
                       ),
-                    ),
-                    if (_moving) ..._arrows(),
-                  ],
+                      if (_moving) ..._arrows(),
+                    ],
+                  ),
                 ),
               ),
             ),
