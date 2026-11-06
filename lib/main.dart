@@ -39,8 +39,19 @@ Future<void> main() async {
   Paint.enableDithering = true;
 
   try {
-    await Firebase.initializeApp();
-  } catch (_) {}
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyDummyKeyForOfflineInit1234567890",
+        appId: "1:100000000000:android:0000000000000000000000",
+        messagingSenderId: "100000000000",
+        projectId: "flauncher-custom",
+      ),
+    );
+  } catch (_) {
+    try {
+      await Firebase.initializeApp();
+    } catch (_) {}
+  }
   final firebaseCrashlytics = FirebaseCrashlytics.instance;
 
   FlutterError.onError = (details) {
