@@ -67,9 +67,6 @@ android {
 
     signingConfigs {
         debug {}
-        release {
-            signingConfig signingConfigs.debug
-        }
     }
 
     buildTypes {
@@ -80,9 +77,6 @@ android {
             minifyEnabled false
             shrinkResources false
             signingConfig signingConfigs.debug
-            firebaseCrashlytics {
-                mappingFileUploadEnabled false
-            }
         }
     }
 }
