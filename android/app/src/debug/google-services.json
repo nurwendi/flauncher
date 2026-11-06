@@ -1,19 +1,19 @@
 {
   "project_info": {
-    "project_number": "_",
-    "project_id": "_"
+    "project_number": "103829104820",
+    "project_id": "flauncher-custom-tv"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "_",
+        "mobilesdk_app_id": "1:103829104820:android:8b9a2c1f0d3e4b5a6c7d8e",
         "android_client_info": {
           "package_name": "me.efesser.flauncher"
         }
       },
       "api_key": [
         {
-          "current_key": "_"
+          "current_key": "AIzaSyDummyKeyForOfflineInitialization123"
         }
       ]
     }

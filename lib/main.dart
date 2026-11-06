@@ -38,10 +38,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Paint.enableDithering = true;
 
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } catch (_) {}
   final firebaseCrashlytics = FirebaseCrashlytics.instance;
 
-  FlutterError.onError = firebaseCrashlytics.recordFlutterError;
+  FlutterError.onError = (details) {
+    try {
+      firebaseCrashlytics.recordFlutterError(details);
+    } catch (_) {}
+  };
   Isolate.current.addErrorListener(RawReceivePort((List<dynamic> pair) async => await firebaseCrashlytics.recordError(
         pair.first,
         pair.last as StackTrace,
@@ -82,24 +88,16 @@ Future<void> main() async {
 
 Future<FirebaseRemoteConfig> _initFirebaseRemoteConfig() async {
   final remoteConfig = FirebaseRemoteConfig.instance;
-  await remoteConfig.setDefaults({"unsplash_enabled": false, "unsplash_access_key": "", "unsplash_secret_key": ""});
-  await remoteConfig.setConfigSettings(
-    RemoteConfigSettings(
-      fetchTimeout: Duration(minutes: 1),
-      minimumFetchInterval: kReleaseMode ? Duration(hours: 6) : Duration.zero,
-    ),
-  );
-  await remoteConfig.ensureInitialized().catchError((error, stackTrace) async {
-    if (!(error is FormatException && error.message == "Invalid envelope")) {
-      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
-    }
-  });
-  remoteConfig.fetchAndActivate().catchError((error, stackTrace) async {
-    if (!(error is FormatException && error.message == "Invalid envelope")) {
-      await FirebaseCrashlytics.instance.recordError(error, stackTrace);
-    }
-    return false;
-  });
-
+  try {
+    await remoteConfig.setDefaults({"unsplash_enabled": false, "unsplash_access_key": "", "unsplash_secret_key": ""});
+    await remoteConfig.setConfigSettings(
+      RemoteConfigSettings(
+        fetchTimeout: Duration(minutes: 1),
+        minimumFetchInterval: kReleaseMode ? Duration(hours: 6) : Duration.zero,
+      ),
+    );
+    await remoteConfig.ensureInitialized();
+    await remoteConfig.fetchAndActivate();
+  } catch (_) {}
   return remoteConfig;
 }
