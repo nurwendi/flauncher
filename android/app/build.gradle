@@ -80,6 +80,9 @@ android {
             minifyEnabled false
             shrinkResources false
             signingConfig signingConfigs.debug
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
 }
